@@ -1,0 +1,68 @@
+<div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+  <app-left-content />
+
+  <section
+    class="flex min-h-screen items-center justify-center bg-white px-6 py-8 sm:px-10 lg:px-12 xl:px-16"
+  >
+    <div class="w-full max-w-96">
+      <h2 class="mb-7 text-[26px] font-bold text-slate-800">Login</h2>
+
+      <form [formGroup]="loginForm" (ngSubmit)="submitForm()">
+        <!-- Username -->
+        <div class="mb-4">
+          <app-input
+            [control]="loginForm.get('email')"
+            [typeInput]="'email'"
+            [idInput]="'email'"
+            [labelInput]="'Email'"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="mb-4">
+          <app-input
+            [control]="loginForm.get('password')"
+            [idInput]="'password'"
+            [labelInput]="'Password'"
+          >
+            .incorrect passowrd
+          </app-input>
+        </div>
+
+        <!-- Forgot Password -->
+        <div class="mb-7 flex justify-end">
+          <a
+            routerLink="/forgot"
+            class="text-sm font-semibold text-blue-500 transition-colors cursor-pointer hover:text-blue-700"
+          >
+            Forgot your password?
+          </a>
+        </div>
+
+        <!-- Login Button -->
+        <button [disabled]="isLoading()" type="submit" class="btn w-full">
+          Login
+          @if (isLoading()) {
+            <i class="fas fa-spinner animate-spin"></i>
+          }
+        </button>
+
+        @if (msgError()) {
+          <p class="text-center text-red-500 mt-4 p-4 bg-red-200">{{ msgError() }}</p>
+        }
+      </form>
+
+      <!-- Register -->
+      <p class="mt-7 text-center text-sm text-slate-500">
+        Don't have an account?
+
+        <a
+          routerLink="/register"
+          class="font-semibold text-blue-600 transition-colors cursor-pointer hover:text-blue-800"
+        >
+          Create yours
+        </a>
+      </p>
+    </div>
+  </section>
+</div>

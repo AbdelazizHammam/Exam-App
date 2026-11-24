@@ -1,3 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "flowbite/src/themes/default";
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+
+
+body {
+  font-family: 'Geist Mono', monospace;
+}
+
+@layer components {
+  .btn {
+    @apply disabled:bg-[#f0f6ff] disabled:text-slate-800
+  disabled:border disabled:border-blue-500
+  disabled:opacity-100 disabled:cursor-not-allowed h-12 w-full bg-blue-600 text-sm font-semibold text-white
+  transition hover:bg-blue-700 active:scale-[0.99] cursor-pointer;
+  }
+  .btn2 {
+    @apply bg-[#f0f6ff] text-slate-800
+  border border-blue-500
+  opacity-100  h-12 w-full  text-sm font-semibold
+  transition hover:bg-blue-700 active:scale-[0.99] cursor-pointer;
+  }
+  .main-label {
+    @apply mb-2 block text-sm font-semibold text-slate-700;
+  }
+  .main-input {
+    @apply h-11 w-full border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100;
+  }
+}

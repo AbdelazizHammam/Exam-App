@@ -1,0 +1,49 @@
+<div class="mb-5 relative">
+  <label for="idInput" class="main-label"> {{ labelInput }} </label>
+
+  <input
+    [class]="{
+      'border-green-500': control?.valid,
+      'border-red-500': control?.invalid && control?.touched,
+    }"
+    [id]="idInput"
+    [type]="typeInput || (flag ? 'password' : 'text')"
+    [formControl]="control"
+    placeholder=""
+    class="main-input"
+  />
+  @if (idInput === 'password' || idInput === 'rePassword' || idInput === 'newPassword') {
+    <span (click)="flag = !flag" class="absolute inset-e-4 translate-y-1/2 cursor-pointer">
+      @if (flag) {
+        <i class="fas fa-eye"></i>
+      } @else {
+        <i class="fas fa-eye-slash"></i>
+      }
+    </span>
+  }
+
+  @if (control?.errors && control?.touched) {
+    <div class="mt-1 text-xs text-red-500">
+      <ul class="mt-1.5 list-disc list-inside">
+        @if (control?.hasError('required')) {
+          <li>input is require.</li>
+        }
+        @if (control?.hasError('minlength')) {
+          <li>input should be more than or equal 3 chars.</li>
+        }
+        @if (control?.hasError('maxlength')) {
+          <li>input should be less than or equal 20 chars.</li>
+        }
+        @if (control?.hasError('email')) {
+          <li>please enter a valid email.</li>
+        }
+        @if (control?.hasError('pattern')) {
+          <li><ng-content /></li>
+        }
+        @if (control?.hasError('mismatch')) {
+          <li>Password confirmation is incorrect.</li>
+        }
+      </ul>
+    </div>
+  }
+</div>
