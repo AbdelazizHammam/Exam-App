@@ -1,100 +1,315 @@
+
 <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+
+  <!-- Left Content -->
   <div class="hidden lg:block lg:sticky lg:top-0 lg:h-screen">
     <app-left-content />
   </div>
 
-  <section class="flex min-h-screen items-center justify-center bg-white px-6 py-12 sm:px-16">
-    <div class="w-full max-w-md">
-      <h2 class="mb-10 text-[30px] font-bold text-slate-800">Create Account</h2>
+  <!-- Register Section -->
+  <section
+    class="flex min-h-screen items-center justify-center
+           bg-white px-6 py-12 sm:px-12 lg:px-16"
+  >
 
-      <form [formGroup]="registerForm" (ngSubmit)="submitForm()">
-        <!-- Username -->
-        <div class="mb-5">
-          <app-input
-            [control]="registerForm.get('username')"
-            [typeInput]="'text'"
-            [idInput]="'username'"
-            [labelInput]="'username'"
-          />
-        </div>
-        <!-- Firstname -->
-        <div class="mb-5">
-          <app-input
-            [control]="registerForm.get('firstName')"
-            [typeInput]="'text'"
-            [idInput]="'firstName'"
-            [labelInput]="'Firstname'"
-          />
-        </div>
-        <!-- Lastname -->
-        <div class="mb-5">
-          <app-input
-            [control]="registerForm.get('lastName')"
-            [typeInput]="'text'"
-            [idInput]="'lastName'"
-            [labelInput]="'Lastname'"
-          />
-        </div>
-        <!-- Email -->
-        <div class="mb-5">
-          <app-input
-            [control]="registerForm.get('email')"
-            [typeInput]="'email'"
-            [idInput]="'email'"
-            [labelInput]="'email'"
-          />
-        </div>
-        <!-- Password -->
-        <div class="mb-5">
-          <app-input
-            [control]="registerForm.get('password')"
-            [idInput]="'password'"
-            [labelInput]="'password'"
-          >
-            Min. 8 characters, including uppercase, lowercase, number, and special character.
-          </app-input>
-        </div>
-        <!-- Repassword -->
-        <div class="mb-5">
-          <app-input
-            [control]="registerForm.get('rePassword')"
-            [idInput]="'rePassword'"
-            [labelInput]="'RePassword'"
-          />
-        </div>
-        <!-- Phone -->
-        <div class="mb-5">
-          <app-input
-            [control]="registerForm.get('phone')"
-            [typeInput]="'tel'"
-            [idInput]="'phone'"
-            [labelInput]="'Phone'"
-          >
-            Enter a valid Egyptian mobile number.
-          </app-input>
-        </div>
+    <div class="w-full max-w-lg">
 
-        <!-- Forgot Password -->
-        <div class="mb-10 flex justify-center">
-          <a class="text-sm font-semibold text-gray-400 text-center">
-            already have an account?
-            <span routerLink="/login" class="text-blue-500 transition hover:text-blue-700"
-              >Login</span
-            >
-          </a>
-        </div>
+      <!-- Stepper -->
+      @if (currentStep() > 1) {
+        <div class="mb-10 flex items-center">
 
-        <!-- Login Button -->
-        <button [disabled]="isLoading()" type="submit" class="btn">
-          Register
-          @if (isLoading()) {
-            <span> <i class="fas fa-spinner animate-spin"></i></span>
+          @for (step of [1, 2, 3, 4]; track step) {
+
+            <div class="flex shrink-0 items-center justify-center">
+              <span
+                class="block h-2.5 w-2.5 rotate-45 transition-all duration-300"
+                [class.bg-blue-600]="currentStep() >= step"
+                [class.bg-white]="currentStep() < step"
+                [class.border]="currentStep() < step"
+                [class.border-blue-400]="currentStep() < step"
+                [class.shadow-md]="currentStep() === step"
+              ></span>
+            </div>
+
+            @if (step !== 4) {
+              <div
+                class="mx-1 h-px flex-1 border-t border-dashed transition-colors duration-300"
+                [class.border-blue-600]="currentStep() > step"
+                [class.border-gray-300]="currentStep() <= step"
+              ></div>
+            }
+
           }
-        </button>
-        @if (msgError()) {
-          <p class="text-center text-red-500 mt-4 p-4 bg-red-200">{{ msgError() }}</p>
+
+        </div>
+      }
+
+      <!-- Header -->
+      <div class="mb-5">
+
+        <h2 class="text-[30px] font-bold tracking-tight text-slate-800">
+          Create Account
+        </h2>
+
+        @if (currentStep() === 1) {
+          <!-- Email -->
         }
+
+        @if (currentStep() === 2) {
+          <h3 class="mt-2 text-lg font-bold text-blue-600">
+            Verify OTP
+          </h3>
+        }
+
+        @if (currentStep() === 3) {
+          <h3 class="mt-2 text-lg font-bold text-blue-600">
+            Tell us more about you
+          </h3>
+        }
+
+        @if (currentStep() === 4) {
+          <h3 class="mt-2 text-lg font-bold text-blue-600">
+            Create a strong password
+          </h3>
+        }
+
+      </div>
+
+      <!-- Register Form -->
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="handleSubmit()"
+      >
+
+        <!-- STEP 1: EMAIL -->
+        @if (currentStep() === 1) {
+
+          <div>
+
+            <div class="mb-7">
+              <app-input
+                [control]="registerForm.get('email')"
+                [typeInput]="'email'"
+                [idInput]="'email'"
+                [labelInput]="'Email'"
+              />
+            </div>
+
+            <button
+              type="submit"
+              [disabled]="isLoading()"
+              class="flex w-full items-center justify-center gap-2
+                     border border-blue-600 bg-blue-50 py-3
+                     text-sm font-semibold text-slate-800
+                     transition hover:bg-blue-100
+                     disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Next
+              <i class="fas fa-chevron-right text-xs"></i>
+
+              @if (isLoading()) {
+                <i class="fas fa-spinner animate-spin"></i>
+              }
+            </button>
+
+            <!-- Login Link -->
+            <div class="mt-8 text-center">
+              <p class="text-sm text-gray-400">
+                Already have an account?
+
+                <a
+                  routerLink="/login"
+                  class="font-medium text-blue-600 transition hover:text-blue-700"
+                >
+                  Login
+                </a>
+              </p>
+            </div>
+
+          </div>
+        }
+
+        <!-- STEP 2: VERIFY OTP -->
+        @if (currentStep() === 2) {
+
+          <div>
+
+            <p class="mb-2 text-sm leading-relaxed text-gray-500">
+              Please enter the 6-digit code we have sent to:
+            </p>
+
+            <p class="mb-7 text-sm font-medium text-slate-800">
+              {{ registerForm.get('email')?.value }}
+
+              <button
+                type="button"
+                (click)="currentStep.set(1)"
+                class="ml-1 font-medium text-blue-600 hover:underline"
+              >
+                Edit
+              </button>
+            </p>
+
+            <div class="mb-7">
+              <app-input
+                [control]="registerForm.get('code')"
+                [typeInput]="'text'"
+                [idInput]="'code'"
+                [labelInput]="'Verification Code'"
+              />
+            </div>
+
+            <p class="mb-7 text-center text-xs text-gray-400">
+              You can request another code in:
+              <span class="font-semibold text-slate-700">60s</span>
+            </p>
+
+            <button
+              type="submit"
+              [disabled]="isLoading()"
+              class="flex w-full items-center justify-center gap-2
+                     border border-blue-600 bg-blue-50 py-3
+                     text-sm font-semibold text-slate-800
+                     transition hover:bg-blue-100
+                     disabled:opacity-50"
+            >
+              Verify Code
+
+              @if (isLoading()) {
+                <i class="fas fa-spinner animate-spin"></i>
+              }
+            </button>
+
+          </div>
+        }
+
+        <!-- STEP 3: PERSONAL INFORMATION -->
+        @if (currentStep() === 3) {
+
+          <div class="space-y-5">
+
+            <!-- First Name & Last Name -->
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+              <app-input
+                [control]="registerForm.get('firstName')"
+                [typeInput]="'text'"
+                [idInput]="'firstName'"
+                [labelInput]="'First name'"
+              />
+
+              <app-input
+                [control]="registerForm.get('lastName')"
+                [typeInput]="'text'"
+                [idInput]="'lastName'"
+                [labelInput]="'Last name'"
+              />
+
+            </div>
+
+            <!-- Username -->
+            <app-input
+              [control]="registerForm.get('username')"
+              [typeInput]="'text'"
+              [idInput]="'username'"
+              [labelInput]="'Username'"
+            />
+
+            <!-- Phone -->
+            <app-input
+              [control]="registerForm.get('phone')"
+              [typeInput]="'tel'"
+              [idInput]="'phone'"
+              [labelInput]="'Phone'"
+            >
+              Enter a valid Egyptian mobile number.
+            </app-input>
+
+            <!-- Next Button -->
+            <button
+              type="submit"
+              [disabled]="isLoading()"
+              class="flex w-full items-center justify-center gap-2
+                     border border-blue-600 bg-blue-50 py-3
+                     text-sm font-semibold text-slate-800
+                     transition hover:bg-blue-100
+                     disabled:opacity-50"
+            >
+              Next
+              <i class="fas fa-chevron-right text-xs"></i>
+
+              @if (isLoading()) {
+                <i class="fas fa-spinner animate-spin"></i>
+              }
+            </button>
+
+          </div>
+        }
+
+        <!-- STEP 4: PASSWORD -->
+        @if (currentStep() === 4) {
+
+          <div>
+
+            <!-- Password -->
+            <div class="mb-6">
+              <app-input
+                [control]="registerForm.get('password')"
+                [idInput]="'password'"
+                [labelInput]="'Password'"
+              >
+                Min. 8 characters, including uppercase, lowercase,
+                number, and special character.
+              </app-input>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="mb-8">
+
+              <app-input
+                [control]="registerForm.get('rePassword')"
+                [idInput]="'rePassword'"
+                [labelInput]="'Confirm Password'"
+              />
+
+              @if (
+                registerForm.hasError('mismatch') &&
+                registerForm.get('rePassword')?.touched
+              ) {
+                <p class="mt-2 text-xs text-red-500">
+                  Passwords do not match.
+                </p>
+              }
+
+            </div>
+
+            <!-- Create Account -->
+            <button
+              type="submit"
+              [disabled]="isLoading()"
+              class="btn w-full"
+            >
+              Create Account
+
+              @if (isLoading()) {
+                <i class="fas fa-spinner animate-spin"></i>
+              }
+            </button>
+
+          </div>
+        }
+
+        <!-- Error Message -->
+        @if (msgError()) {
+          <p class="mt-5 rounded-md bg-red-50 p-4 text-center text-sm text-red-500">
+            {{ msgError() }}
+          </p>
+        }
+
       </form>
+
     </div>
+
   </section>
+
 </div>

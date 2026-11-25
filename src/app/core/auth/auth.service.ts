@@ -9,20 +9,24 @@ import { environment } from '../../../environments/environment.development';
 export class AuthService {
   private readonly httpClient = inject(HttpClient);
 
+  verifyEmail(data: object): Observable<any> {
+    return this.httpClient.post(environment.baseUrl + 'auth/send-email-verification', data);
+  }
+  confirmEmail(data: object): Observable<any> {
+    return this.httpClient.post(environment.baseUrl + 'auth/confirm-email-verification', data);
+  }
   registerForm(data: object): Observable<any> {
-    return this.httpClient.post(environment.baseUrl + 'auth/signup', data);
+    return this.httpClient.post(environment.baseUrl + 'auth/register', data);
   }
 
   loginForm(data: object): Observable<any> {
-    return this.httpClient.post(environment.baseUrl + 'auth/signin', data);
+    return this.httpClient.post(environment.baseUrl + 'auth/login', data);
   }
   submitVerifyEmail(data: object): Observable<any> {
-    return this.httpClient.post(environment.baseUrl + 'auth/forgotPassword', data);
+    return this.httpClient.post(environment.baseUrl + 'auth/forgot-password', data);
   }
-  submitVerifyCode(data: object): Observable<any> {
-    return this.httpClient.post(environment.baseUrl + 'auth/verifyResetCode', data);
-  }
+  
   submitResetPassword(data: object): Observable<any> {
-    return this.httpClient.post(environment.baseUrl + 'auth/resetPassword', data);
+    return this.httpClient.post(environment.baseUrl + 'auth/reset-password', data);
   }
 }

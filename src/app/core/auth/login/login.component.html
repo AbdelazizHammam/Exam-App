@@ -11,10 +11,10 @@
         <!-- Username -->
         <div class="mb-4">
           <app-input
-            [control]="loginForm.get('email')"
-            [typeInput]="'email'"
-            [idInput]="'email'"
-            [labelInput]="'Email'"
+            [control]="loginForm.get('username')"
+            [typeInput]="'text'"
+            [idInput]="'username'"
+            [labelInput]="'Username'"
           />
         </div>
 
@@ -24,9 +24,7 @@
             [control]="loginForm.get('password')"
             [idInput]="'password'"
             [labelInput]="'Password'"
-          >
-            .incorrect passowrd
-          </app-input>
+          />
         </div>
 
         <!-- Forgot Password -->
@@ -42,13 +40,17 @@
         <!-- Login Button -->
         <button [disabled]="isLoading()" type="submit" class="btn w-full">
           Login
+
           @if (isLoading()) {
             <i class="fas fa-spinner animate-spin"></i>
           }
         </button>
 
+        <!-- Error Message -->
         @if (msgError()) {
-          <p class="text-center text-red-500 mt-4 p-4 bg-red-200">{{ msgError() }}</p>
+          <p class="text-center text-red-500 mt-4 p-4 bg-red-200">
+            {{ msgError() }}
+          </p>
         }
       </form>
 
